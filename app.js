@@ -58,9 +58,9 @@ function checkInput(input) {
     addPakutud(input);
     console.log(guess);
     checkWin(input);
+    return true;
   } else {
     if (elud > 1) {
-      elud--;
       console.log("-1 elu, järel on " + elud + " elu");
       addPakutud(input);
     } else {
@@ -68,6 +68,7 @@ function checkInput(input) {
       console.log("Sõna oli " + word);
       elud = 0;
     }
+    return false;
   }
 }
 
@@ -78,7 +79,9 @@ function startGame(elud) {
   while (elud > 0) {
     if (!checkWin(input) && elud > 0) {
       input = prompt('Paku täht: ');
-      checkInput(input);
+      if(!checkInput(input)) {
+        elud -= 1;
+      }
     } else {
       break;
     }
