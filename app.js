@@ -49,7 +49,7 @@ function checkWin(input) {
 
 // Kontrollime ja märgime ära mängulaua vastavalt kasutaja sisendile
 function checkInput(input) {
-  if (word.includes(input)) {
+  if (word.includes(input) || pakutud.includes(input)) {
     for (let i = 0; i < arrayWord.length; i++) {
       if (arrayWord[i] == input) {
         guess[i] = input;
@@ -61,6 +61,7 @@ function checkInput(input) {
     return true;
   } else {
     if (elud > 1) {
+      elud--;
       console.log("-1 elu, järel on " + elud + " elu");
       addPakutud(input);
     } else {
@@ -80,7 +81,7 @@ function startGame(elud) {
     if (!checkWin(input) && elud > 0) {
       input = prompt('Paku täht: ');
       if(!checkInput(input)) {
-        elud -= 1;
+        elud--;
       }
     } else {
       break;
