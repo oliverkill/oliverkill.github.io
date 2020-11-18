@@ -36,11 +36,9 @@ function addPakutud(input) {
 function checkWin(input) {
   if (input == word) {
     console.log("Õige vastus. Sõna oli: " + input);
-    elud = 0;
     return true;
   } else if (!guess.includes("_")) {
     console.log("Arvasid sõna ära, oled võitnud");
-    elud = 0;
     return true;
   } else {
     return false;
@@ -67,7 +65,6 @@ function checkInput(input) {
     } else {
       console.log("Kaotasid mängu, sest elud said otsa");
       console.log("Sõna oli " + word);
-      elud = 0;
     }
     return false;
   }
