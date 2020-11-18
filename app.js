@@ -2,7 +2,7 @@ var prompt = require('prompt-sync')();
 const randomWords = require('random-english-words');
 
 // Seame mängu jaoks vajalikud globaalsed muutujad
-const word = "test";
+const word = randomWords();
 let elud = 4;
 let pakutud = [];
 let guess = [];
