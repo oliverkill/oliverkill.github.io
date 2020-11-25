@@ -1,90 +1,110 @@
 var prompt = require('prompt-sync')();
 const randomWords = require('random-english-words');
 
-// Seame mängu jaoks vajalikud globaalsed muutujad
-const word = randomWords();
-let elud = 4;
-let pakutud = [];
-let guess = [];
-let arrayWord = [];
-let input = "";
+// Hangman class
+class hangMan {
 
-// Muudame otsitava sõna array-ks, et formaat oleks ühtlane
-function wordToArray() {
-  for (let i = 0; i < word.length; i++) {
-    arrayWord.push(word.charAt(i));
-  }
-}
-
-// Loome mänguvälja, mis näitab, mitu tähte on otsitavas sõnas
-function setPlayingField() {
-  for (let i = 0; i < word.length; i++) {
-    guess.push("_");
-  }
-  console.log(guess);
-}
-
-// Lisame pakutud tähed muutujasse, et kasutaja teaks, mis tähti ja sõnu on pakutud
-function addPakutud(input) {
-  if (!pakutud.includes(input)) {
-    pakutud.push(input);
-  }
-  console.log("Pakutud tähed: " + pakutud);
-}
-
-// Kontrollime, kas kasutaja sisend tähendab tema jaoks mängu võitu
-function checkWin(input) {
-  if (input == word) {
-    console.log("Õige vastus. Sõna oli: " + input);
-    return true;
-  } else if (!guess.includes("_")) {
-    console.log("Arvasid sõna ära, oled võitnud");
-    return true;
-  } else {
-    return false;
-  }
-}
-
-// Kontrollime ja märgime ära mängulaua vastavalt kasutaja sisendile
-function checkInput(input) {
-  if (word.includes(input) || pakutud.includes(input)) {
-    for (let i = 0; i < arrayWord.length; i++) {
-      if (arrayWord[i] == input) {
-        guess[i] = input;
-      }
+    // Seame mängu jaoks vajalikud globaalsed muutujad  
+    constructor(elud) {
+        this.elud = elud;
+        this.guess = [];
+        this.arrayWord = [];
+        this.word = randomWords();
+        this.input = "";
     }
-    addPakutud(input);
-    console.log(guess);
-    checkWin(input);
-    return true;
-  } else {
-    if (elud > 1) {
-      elud--;
-      console.log("-1 elu, järel on " + elud + " elu");
-      addPakutud(input);
+
+    // Muudame otsitava sõna array-ks, et formaat oleks ühtlane
+    wordToArray(word) {
+        for (let i = 0; i < word.length; i++) {
+            this.arrayWord.push(word.charAt(i));
+        }
+    }
+
+    // Loome mänguvälja, mis näitab, mitu tähte on otsitavas sõnas
+    setPlayingField(word, guess) {
+        for (let i = 0; i < word.length; i++) {
+            guess.push("_");
+        }
+        console.log(guess);
+    }
+
+    // Kontrollime, kas kasutaja sisend tähendab tema jaoks mängu võitu
+    checkWin(input, guess, word) {
+        if (input == word) {
+            console.log("Õige vastus. Sõna oli: " + input);
+            return true;
+        } else if (!guess.includes("_")) {
+            console.log("Arvasid sõna ära, oled võitnud");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Kontrollime ja märgime ära mängulaua vastavalt kasutaja sisendile
+    checkInput(input, arrayWord, word, pakutud, guess) {
+        if (word.includes(input) || pakutud.includes(input)) {
+            for (let i = 0; i < arrayWord.length; i++) {
+                if (arrayWord[i] == input) {
+                    guess[i] = input;
+                }
+            }
+            console.log(guess);
+            return true;
+        } else {
+            elud--;
+            if (elud > 0) {
+                console.log("-1 elu, järel on " + elud + " elu");
+                this.elud--;
+            } else {
+                console.log("Kaotasid mängu, sest elud said otsa");
+                console.log("Sõna oli " + word);
+            }
+            return false;
+        }
+    }
+
+    getElud() {
+        return this.elud;
+    }
+
+    getInput() {
+        return this.input;
+    }
+
+    getWord() {
+        return this.word;
+    }
+
+    getArrayword() {
+        return this.arrayWord;
+    }
+
+    getInput() {
+        return this.input;
+    }
+
+    getGuess() {
+        return this.guess;
+    }
+
+    setInput(input) {
+        this.input = input;
+    }
+
+}
+
+const uusPela = new hangMan(4);
+uusPela.wordToArray(uusPela.getWord());
+uusPela.setPlayingField(uusPela.getWord(), uusPela.getGuess());
+elud = uusPela.getElud();
+while (elud > 0) {
+    if (!uusPela.checkWin(uusPela.getInput(), uusPela.getGuess(), uusPela.getWord()) && elud > 0) {
+        uusPela.setInput(prompt('Paku täht: '));
+        if (!uusPela.checkInput(uusPela.getInput(), uusPela.getArrayword(), uusPela.getWord(), uusPela.getPakutud(), uusPela.getGuess())) {
+            console.log("Proovi veel")
+        }
     } else {
-      console.log("Kaotasid mängu, sest elud said otsa");
-      console.log("Sõna oli " + word);
+        break;
     }
-    return false;
-  }
 }
-
-// Funktsioon, mis järjekorrastab programmi tegevuse kogu mänguks
-function startGame(elud) {
-  wordToArray();
-  setPlayingField();
-  while (elud > 0) {
-    if (!checkWin(input) && elud > 0) {
-      input = prompt('Paku täht: ');
-      if(!checkInput(input)) {
-        elud--;
-      }
-    } else {
-      break;
-    }
-  }
-}
-
-// Alustab mängu
-startGame(elud);
