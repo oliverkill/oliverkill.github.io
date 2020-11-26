@@ -103,9 +103,9 @@ while (elud > 0) {
     if (!uusPela.checkWin(uusPela.getInput(), uusPela.getGuess(), uusPela.getWord()) && elud > 0) {
         uusPela.setInput(prompt('Paku täht: '));
         if (!uusPela.checkInput(uusPela.getInput(), uusPela.getArrayword(), uusPela.getWord(), uusPela.getGuess())) {
-            console.log("Proovi veel")
         }
     } else {
         break;
     }
 }
+// Edasi arenduse võimalus on "pakutud" tähtede loend
