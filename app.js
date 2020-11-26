@@ -42,8 +42,8 @@ class hangMan {
     }
 
     // Kontrollime ja märgime ära mängulaua vastavalt kasutaja sisendile
-    checkInput(input, arrayWord, word, pakutud, guess) {
-        if (word.includes(input) || pakutud.includes(input)) {
+    checkInput(input, arrayWord, word, guess) {
+        if (word.includes(input)) {
             for (let i = 0; i < arrayWord.length; i++) {
                 if (arrayWord[i] == input) {
                     guess[i] = input;
@@ -56,6 +56,7 @@ class hangMan {
             if (elud > 0) {
                 console.log("-1 elu, järel on " + elud + " elu");
                 this.elud--;
+                console.log(guess);
             } else {
                 console.log("Kaotasid mängu, sest elud said otsa");
                 console.log("Sõna oli " + word);
@@ -101,7 +102,7 @@ elud = uusPela.getElud();
 while (elud > 0) {
     if (!uusPela.checkWin(uusPela.getInput(), uusPela.getGuess(), uusPela.getWord()) && elud > 0) {
         uusPela.setInput(prompt('Paku täht: '));
-        if (!uusPela.checkInput(uusPela.getInput(), uusPela.getArrayword(), uusPela.getWord(), uusPela.getPakutud(), uusPela.getGuess())) {
+        if (!uusPela.checkInput(uusPela.getInput(), uusPela.getArrayword(), uusPela.getWord(), uusPela.getGuess())) {
             console.log("Proovi veel")
         }
     } else {
